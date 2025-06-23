@@ -9,7 +9,7 @@ name: 'Execução Agendada'
 
 on:
   schedule:
-    - cron: '30 21 * * 1'
+    - cron: '30 20 * * 1'
 
 
 # configura as tarefas/trabalhos dentro do pipeline = jobs
