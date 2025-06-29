@@ -11,14 +11,13 @@ on:
   schedule:
     - cron: '30 20 * * 1'
 
-
 # configura as tarefas/trabalhos dentro do pipeline = jobs
 jobs:
   e2e-tests:
     #máquina que o job vai executar
     runs-on: ubuntu-latest
 
-#steps - passos do script de build
+    #steps - passos do script de build
     steps:
       # clone do projeto
       - uses: actions/checkout@v4
@@ -43,5 +42,3 @@ jobs:
       # Executar os testes e2e
       - name: Executando testes E2E
         run: yarn run e2e
-
-

@@ -1,6 +1,4 @@
-
 # CI de Nível 04 - Diparao dos testes dentro do pipeline de dev
-
 
 # - explicações do fluxo
 
@@ -10,7 +8,6 @@
 #         - steps - instalar deps
 #         - steps - executar scripts de testes e2e
 #          - steps - publiar resultados
-
 
 # forma como iremos executar no n4. pode ser executado com bloco, atraves de cada jobs ou sequencial
 # - workflow - n4
@@ -31,17 +28,14 @@
 #          - steps - gerar artefatos de aplicação
 #          - steps - pulbicar a aplicação em algum ambiente
 
-
-
 # Nom do nosso 'pipeline'
 name: 'Execução Integrada'
-
 
 # Começar a configurar as regras de pipeline
 # regras de disparo (gatilhos/triggers)
 # gatilho de execução manual = workflow_dispatch
 
-on: 
+on:
   workflow_dispatch:
 
 # configura as tarefas/trabalhos dentro do pipeline = jobs
@@ -54,7 +48,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        
+
       - name: Instalando Yarn
         run: npm install -g yarn
 
@@ -64,13 +58,12 @@ jobs:
       - name: Checando padronização do código
         run: yarn lint
 
-
   unidade:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-        
+
       - name: Instalando Yarn
         run: npm install -g yarn
 
@@ -79,17 +72,16 @@ jobs:
 
       - name: Executando testes de unidade
         run: yarn test
-    
 
   e2e-testes:
     runs-on: ubuntu-latest
 
-#steps - passos do script de build
+    #steps - passos do script de build
     steps:
       # clone do projeto
       - uses: actions/checkout@v4
 
-      # instalação do node
+      # instalação do node - como já vem na maquina do github, não precisaria colocar as linhas referentes ao node
       - uses: actions/setup-node@v4
         with:
           node-version: 22.x
@@ -110,21 +102,16 @@ jobs:
       - name: Executando testes E2E
         run: yarn run e2e
 
-
- # o código abaixo executa no final da execução da pipeline vigente para fazer upload do arquivo de relatório de testes
+      # o código abaixo executa no final da execução da pipeline vigente para fazer upload do arquivo de relatório de testes
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: status_report_test
           path: ./playwright-report
 
-  
   deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Simulação do Deploy
-        run: echo "Simulando o deploy"
-
-    
-
+        run: echo "Simulando o deploy com sucesso"

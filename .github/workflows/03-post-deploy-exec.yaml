@@ -7,12 +7,11 @@ name: 'Execução por Deploy'
 # regras de disparo (gatilhos/triggers)
 # gatilho de execução a partir de outro pipeline = workflow_run
 
-on:   
+on:
   workflow_run:
     workflows: ['Execução Manual']
     types:
       - completed
-
 
 # configura as tarefas/trabalhos dentro do pipeline = jobs
 jobs:
@@ -20,8 +19,7 @@ jobs:
     #máquina que o job vai executar
     runs-on: ubuntu-latest
 
-
-    # condicional 
+    # condicional
     # `${expressao}`
     # == comparação
     # coloca o if para validar se a pipeline manual foi executada com sucesso. se sim, executa os steps
@@ -29,8 +27,7 @@ jobs:
 
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
-
-#steps - passos do script de build
+    #steps - passos do script de build
     steps:
       # clone do projeto
       - uses: actions/checkout@v4
