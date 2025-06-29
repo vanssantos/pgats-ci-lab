@@ -46,36 +46,39 @@ on:
 
 # configura as tarefas/trabalhos dentro do pipeline = jobs
 jobs:
+  # inspeção é validar a parte de código, se está com boas práticas utilizadas pelo time
+  # seria a parte de análise estática
+  # pode ter tb verificação de segurança e etc...
   inpsecao:
     runs-on: ubuntu-latest
 
     steps:
-        - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         
-        - name: Instalando Yarn
-          run: npm install -g yarn
+      - name: Instalando Yarn
+        run: npm install -g yarn
 
-        - name: Instalando dependências
-          run: yarn
+      - name: Instalando dependências
+        run: yarn
 
-        - name: Checando padronização do código
-          run: yarn lint
+      - name: Checando padronização do código
+        run: yarn lint
 
 
   unidade:
     runs-on: ubuntu-latest
 
     steps:
-        - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         
-        - name: Instalando Yarn
-          run: npm install -g yarn
+      - name: Instalando Yarn
+        run: npm install -g yarn
 
-        - name: Instalando dependências
-          run: yarn
+      - name: Instalando dependências
+        run: yarn
 
-        - name: Executando testes de unidade
-          run: yarn test
+      - name: Executando testes de unidade
+        run: yarn test
     
 
   e2e-testes:
