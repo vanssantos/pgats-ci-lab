@@ -1,0 +1,127 @@
+
+# CI de Nível 04 - Diparao dos testes dentro do pipeline de dev
+
+
+# - explicações do fluxo
+
+# fluxo que realizamos do n1 ao n3
+# - workflow - n1, n2 e n3
+#     - jobs - e2e testes
+#         - steps - instalar deps
+#         - steps - executar scripts de testes e2e
+#          - steps - publiar resultados
+
+
+# forma como iremos executar no n4. pode ser executado com bloco, atraves de cada jobs ou sequencial
+# - workflow - n4
+#     - jobs - inspeção (bloco 1)
+#         - steps - instalar deps
+#         - steps - executar scripts de lint
+#     - jobs - unidade (bloco 1)
+#         - steps - instalar deps
+#         - steps - executar scripts de testes de unidade
+#     - jobs - e2e testes (bloco 2)
+#         - steps - instalar deps
+#         - steps - subir a aplicação localmente
+#         - steps - instalar browsers/navegadores
+#         - steps - executar script de testes e2e
+#         - steps - publicar resultados de testes (zip/online)
+#      - jobs - deploy (bloco 3)
+#          - steps - instalar deps
+#          - steps - gerar artefatos de aplicação
+#          - steps - pulbicar a aplicação em algum ambiente
+
+
+
+# Nom do nosso 'pipeline'
+name: 'Execução por Deploy'
+
+
+# Começar a configurar as regras de pipeline
+# regras de disparo (gatilhos/triggers)
+# gatilho de execução manual = workflow_dispatch
+
+on: 
+  workflow_dispatch:
+
+# configura as tarefas/trabalhos dentro do pipeline = jobs
+jobs:
+  inpsecao:
+    runs-on: ubuntu-latest
+
+    steps:
+        - uses: actions/checkout@v4
+        
+        - name: Instalando Yarn
+          run: npm install -g yarn
+
+        - name: Instalando dependências
+          run: yarn
+
+        - name: Checando padronização do código
+          run: yarn lint
+
+
+  unidade:
+    runs-on: ubuntu-latest
+
+    steps:
+        - uses: actions/checkout@v4
+        
+        - name: Instalando Yarn
+          run: npm install -g yarn
+
+        - name: Instalando dependências
+          run: yarn
+
+        - name: Executando testes de unidade
+          run: yarn test
+    
+
+  e2e-testes:
+    runs-on: ubuntu-latest
+
+#steps - passos do script de build
+    steps:
+      # clone do projeto
+      - uses: actions/checkout@v4
+
+      # instalação do node
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+
+      # instalação do yarn
+      - name: Instalando yarn
+        run: npm install -g yarn
+
+      # instalação das dependências
+      - name: Instalando dependências
+        run: yarn
+
+      # instalação do playwright / e instalação de browsers e navegadores
+      - name: Instalando playwright
+        run: yarn playwright install
+
+      # Executar os testes e2e
+      - name: Executando testes E2E
+        run: yarn run e2e
+
+
+ # o código abaixo executa no final da execução da pipeline vigente para fazer upload do arquivo de relatório de testes
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: status_report_test
+          path: ./playwright-report
+
+  
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Simulação do Deploy
+        run: echo "Simulando o deploy"
+
+    
+
