@@ -34,7 +34,7 @@
 
 
 # Nom do nosso 'pipeline'
-name: 'Execução por Deploy'
+name: 'Execução Integrada'
 
 
 # Começar a configurar as regras de pipeline
